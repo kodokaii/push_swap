@@ -6,7 +6,7 @@
 /*   By: nlaerema <nlaerema@student.42lehavre.fr>	+#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 10:58:17 by nlaerema          #+#    #+#             */
-/*   Updated: 2023/11/10 22:08:21 by nlaerema         ###   ########.fr       */
+/*   Updated: 2023/11/11 16:20:11 by nlaerema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int	init_pile(int *tab, int tab_size, t_pile *pile)
 	pile->b_count = 0;
 	pile->a = NULL;
 	pile->b = NULL;
-	while (--tab_size)
+	while (tab_size--)
 	{
 		new = ft_lstnew(tab + tab_size);
 		if (!new)
@@ -44,5 +44,9 @@ int	push_swap(int *tab, int tab_size)
 
 	if (init_pile(tab, tab_size, &pile))
 		return (push_swap_exit(EXIT_FAILURE, &pile));
+	for (int i = 0; i < tab_size; i++)
+		ft_printf("%d, ", tab[i]);
+	ft_printf("\n");
+	ft_printf("sort = %d\n", sort_count(&pile));
 	return (push_swap_exit(EXIT_SUCCESS, &pile));
 }

@@ -6,7 +6,7 @@
 /*   By: nlaerema <nlaerema@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 10:58:17 by nlaerema          #+#    #+#             */
-/*   Updated: 2023/11/10 22:50:45 by nlaerema         ###   ########.fr       */
+/*   Updated: 2023/11/10 23:11:45 by nlaerema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ typedef struct s_pile
 }	t_pile;
 
 int		push_swap(int *tab, int tab_size);
+
+int		sort_count(t_pile *pile);
 
 void	push_a(t_pile *pile);
 void	push_b(t_pile *pile);

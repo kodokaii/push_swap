@@ -6,13 +6,21 @@
 /*   By: nlaerema <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 23:14:01 by nlaerema          #+#    #+#             */
-/*   Updated: 2023/11/10 21:52:14 by nlaerema         ###   ########.fr       */
+/*   Updated: 2023/11/25 16:02:12 by nlaerema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-static int	sort_tab(int *tab, int *tab_sort, int count)
+static int	_error(char **argv, int *tab)
+{
+	free(tab);
+	ft_split_free(argv);
+	ft_putstr_fd("Error\n", STDERR_FILENO);
+	return (EXIT_FAILURE);
+}
+
+static int	_sort_tab(int *tab, int *tab_sort, int count)
 {
 	int	after_count;
 	int	before_count;
@@ -33,15 +41,15 @@ static int	sort_tab(int *tab, int *tab_sort, int count)
 			return (EXIT_FAILURE);
 	}
 	ft_swap_int(tab_sort, tab_sort + before_count);
-	if (1 < before_count && sort_tab(tab, tab_sort, before_count))
+	if (1 < before_count && _sort_tab(tab, tab_sort, before_count))
 		return (EXIT_FAILURE);
-	if (1 < after_count && sort_tab(tab,
+	if (1 < after_count && _sort_tab(tab,
 			tab_sort + before_count + 1, after_count))
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
 
-static int	normalize_tab(int *tab, int tab_size)
+static int	_normalize_tab(int *tab, int tab_size)
 {
 	int	*tab_sort;
 	int	i;
@@ -55,7 +63,7 @@ static int	normalize_tab(int *tab, int tab_size)
 		tab_sort[i] = i;
 		i++;
 	}
-	if (sort_tab(tab, tab_sort, tab_size))
+	if (_sort_tab(tab, tab_sort, tab_size))
 	{
 		free(tab_sort);
 		return (EXIT_FAILURE);
@@ -63,50 +71,48 @@ static int	normalize_tab(int *tab, int tab_size)
 	i = 0;
 	while (i < tab_size)
 	{
-		tab[tab_sort[i]] = i;
+		tab[tab_sort[i]] = i + 1;
 		i++;
 	}
 	free(tab_sort);
 	return (EXIT_SUCCESS);
 }
 
-static int	get_tab(int **tab, int argc, char **argv)
+static int	_argv_to_tab(int *tab, int argc, char **argv)
 {
 	int		i;
 	char	*end;
 
 	i = 0;
-	tab = malloc(argc * sizeof(int));
-	if (!tab)
-		return (EXIT_FAILURE);
 	while (i < argc)
 	{
-		(*tab)[i] = ft_strtoi(argv[i], &end);
-		if (*end)
+		tab[i] = ft_strtoi(argv[i], &end);
+		if (*end != '\0' || errno == ERANGE)
 			return (EXIT_FAILURE);
 		i++;
 	}
-	return (normalize_tab(*tab, argc));
+	return (EXIT_SUCCESS);
 }
 
 int	main(int argc, char *argv[])
 {
-	int	*tab;
+	int		*tab;
 
-	if (0 < argc)
+	if (1 < argc)
 	{
-		if (get_tab(&tab, --argc, ++argv))
-		{
-			free(tab);
-			ft_putstr_fd("Error\n", STDERR_FILENO);
-			return (EXIT_FAILURE);
-		}
+		argc--;
+		argv++;
+		tab = NULL;
+		if (ft_split_argv(&argc, &argv))
+			return (_error(argv, tab));
+		tab = malloc(argc * sizeof(int));
+		if (_argv_to_tab(tab, argc, argv))
+			return (_error(argv, tab));
+		if (_normalize_tab(tab, argc))
+			return (_error(argv, tab));
 		if (push_swap(tab, argc))
-		{
-			free(tab);
-			ft_putstr_fd("Error\n", STDERR_FILENO);
-			return (EXIT_FAILURE);
-		}
+			return (_error(argv, tab));
+		ft_split_free(argv);
 		free(tab);
 	}
 	return (EXIT_SUCCESS);
