@@ -6,7 +6,7 @@
 /*   By: nlaerema <nlaerema@student.42lehavre.fr>	+#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 10:58:17 by nlaerema          #+#    #+#             */
-/*   Updated: 2023/11/10 22:31:07 by nlaerema         ###   ########.fr       */
+/*   Updated: 2023/11/25 17:19:20 by nlaerema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ void	push_a(t_pile *pile)
 		pile->b = buf;
 		pile->b_count--;
 		pile->a_count++;
+		ft_putstr_fd("pa\n", STDOUT_FILENO);
 	}
-	ft_putstr_fd("pa\n", STDOUT_FILENO);
 }
 
 void	push_b(t_pile *pile)
@@ -38,6 +38,6 @@ void	push_b(t_pile *pile)
 		pile->a = buf;
 		pile->a_count--;
 		pile->b_count++;
+		ft_putstr_fd("pb\n", STDOUT_FILENO);
 	}
-	ft_putstr_fd("pb\n", STDOUT_FILENO);
 }

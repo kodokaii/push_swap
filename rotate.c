@@ -6,7 +6,7 @@
 /*   By: nlaerema <nlaerema@student.42lehavre.fr>	+#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 10:58:17 by nlaerema          #+#    #+#             */
-/*   Updated: 2023/11/10 22:44:16 by nlaerema         ###   ########.fr       */
+/*   Updated: 2023/11/25 17:18:30 by nlaerema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ void	rotate_a(t_pile *pile)
 		ft_lstlast(pile->a)->next = pile->a;
 		pile->a->next = NULL;
 		pile->a = buf;
+		ft_putstr_fd("ra\n", STDOUT_FILENO);
 	}
-	ft_putstr_fd("ra\n", STDOUT_FILENO);
 }
 
 void	rotate_b(t_pile *pile)
@@ -36,8 +36,8 @@ void	rotate_b(t_pile *pile)
 		ft_lstlast(pile->b)->next = pile->b;
 		pile->b->next = NULL;
 		pile->b = buf;
+		ft_putstr_fd("rb\n", STDOUT_FILENO);
 	}
-	ft_putstr_fd("rb\n", STDOUT_FILENO);
 }
 
 void	rotate_rotate(t_pile *pile)
@@ -58,5 +58,6 @@ void	rotate_rotate(t_pile *pile)
 		pile->b->next = NULL;
 		pile->b = buf;
 	}
-	ft_putstr_fd("rr\n", STDOUT_FILENO);
+	if (1 < pile->a_count && 1 < pile->b_count)
+		ft_putstr_fd("rr\n", STDOUT_FILENO);
 }
