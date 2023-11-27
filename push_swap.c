@@ -6,7 +6,7 @@
 /*   By: nlaerema <nlaerema@student.42lehavre.fr>	+#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 10:58:17 by nlaerema          #+#    #+#             */
-/*   Updated: 2023/11/25 17:15:02 by nlaerema         ###   ########.fr       */
+/*   Updated: 2023/11/27 14:25:01 by nlaerema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,18 +38,25 @@ static int	_init(int *tab, int tab_size, t_pile *pile)
 	return (EXIT_SUCCESS);
 }
 
-void	nb_print(int *nb, int fd)
+void	ft_radix_sort(t_pile *pile, t_uint bit)
 {
-	ft_putint_fd(*nb, fd);
-}
+	int	i;
 
-void	pile_print(t_pile *pile)
-{
-	ft_printf("A: ");
-	ft_putlst_fd(pile->a, &nb_print, STDOUT_FILENO);
-	ft_printf("\nB: ");
-	ft_putlst_fd(pile->b, &nb_print, STDOUT_FILENO);
-	ft_printf("\n\n");
+	i = 0;
+	if ((1 << bit) < pile->all_count)
+	{
+		while (i < pile->all_count)
+		{
+			if (*(int *)pile->a->data & (1 << bit))
+				rotate_a(pile);
+			else
+				push_b(pile);
+			i++;
+		}
+		while (pile->b_count)
+			push_a(pile);
+		ft_radix_sort(pile, bit + 1);
+	}
 }
 
 int	push_swap(int *tab, int tab_size)
@@ -58,11 +65,6 @@ int	push_swap(int *tab, int tab_size)
 
 	if (_init(tab, tab_size, &pile))
 		return (_end(EXIT_FAILURE, &pile));
-	pile_print(&pile);
-	push_b(&pile);
-	pile_print(&pile);
-	swap_b(&pile);
-	pile_print(&pile);
-	ft_printf("\nsort = %d\n", sort_count(&pile));
+	ft_radix_sort(&pile, 0);
 	return (_end(EXIT_SUCCESS, &pile));
 }
