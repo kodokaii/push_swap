@@ -6,7 +6,7 @@
 /*   By: nlaerema <nlaerema@student.42lehavre.fr>	+#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 10:58:17 by nlaerema          #+#    #+#             */
-/*   Updated: 2023/12/02 03:05:23 by nlaerema         ###   ########.fr       */
+/*   Updated: 2023/12/02 03:08:58 by nlaerema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,8 +92,6 @@ int	add_instruction(t_pile *pile, t_uint instruction)
 	static t_uint	instruction_tab[INSTRUCTION_COUNT]
 		= {SA, SB, SS, PA, PB, RA, RB, RR, RRA, RRB, RRR};
 
-	(void)_remove_instruction;
-	(void)_fact_instruction;
 	if (_remove_instruction(pile, instruction))
 		return (EXIT_SUCCESS);
 	if (_fact_instruction(pile, instruction, instruction_tab))
