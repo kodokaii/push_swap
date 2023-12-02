@@ -6,34 +6,35 @@
 /*   By: nlaerema <nlaerema@student.42lehavre.fr>	+#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 10:58:17 by nlaerema          #+#    #+#             */
-/*   Updated: 2023/12/02 01:54:36 by nlaerema         ###   ########.fr       */
+/*   Updated: 2023/12/02 17:14:21 by nlaerema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int	pile_init(t_pile *pile, t_uint *tab, t_uint tab_size)
+int	dup_algo(t_algo *algo_dst, t_algo *algo_src)
 {
-	t_list	*new;
-
-	pile->all_count = tab_size;
-	pile->a_count = tab_size;
-	pile->b_count = 0;
-	pile->a = NULL;
-	pile->b = NULL;
-	pile->instruction_count = 0;
-	pile->instruction = NULL;
-	while (tab_size--)
+	if (ft_lstdup(algo_dst->pile[A].lst, algo_src->pile[A].lst))
+		return (EXIT_FAILURE);
+	if (ft_lstdup(algo_dst->pile[B].lst, algo_src->pile[B].lst))
 	{
-		new = ft_lstnew(tab + tab_size);
-		if (!new)
-			return (EXIT_FAILURE);
-		ft_lstadd_front(&pile->a, new);
+		ft_lstclear(&algo_dst->pile[A].lst, NULL);
+		return (EXIT_FAILURE);
 	}
+	if (ft_lstdup(algo_dst->instruction, algo_src->instruction))
+	{
+		ft_lstclear(&algo_dst->pile[A].lst, NULL);
+		ft_lstclear(&algo_dst->pile[B].lst, NULL);
+		return (EXIT_FAILURE);
+	}
+	algo_dst->all_count = algo_src->all_count;
+	algo_dst->pile[A].count = algo_src->pile[A].count;
+	algo_dst->pile[B].count = algo_src->pile[B].count;
+	algo_dst->instruction_count = algo_src->instruction_count;
 	return (EXIT_SUCCESS);
 }
 
-t_uint	sort_count(t_pile *pile)
+t_uint	sort_count(t_push_swap *ps)
 {
 	t_list	*current;
 	t_uint	res;
@@ -41,8 +42,8 @@ t_uint	sort_count(t_pile *pile)
 
 	i = 1;
 	res = 0;
-	current = pile->a;
-	while (i <= pile->a_count)
+	current = get_pile(ps, A)->lst;
+	while (i <= get_pile(ps, A)->count)
 	{
 		if (i == *(t_uint *)current->data)
 			res++;
@@ -50,4 +51,25 @@ t_uint	sort_count(t_pile *pile)
 		i++;
 	}
 	return (res);
+}
+
+t_algo	*best_algo(t_algo *algo, t_uint algo_count)
+{
+	t_uint	min_index;
+	t_uint	min;
+	t_uint	i;
+
+	i = 0;
+	min = UINT_MAX;
+	min_index = UINT_MAX;
+	while (i < algo_count)
+	{
+		if (algo[i].instruction_count < min)
+		{
+			min_index = i;
+			min = algo[i].instruction_count;
+		}
+		i++;
+	}
+	return (algo + min_index);
 }

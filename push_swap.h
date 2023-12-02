@@ -6,7 +6,7 @@
 /*   By: nlaerema <nlaerema@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 10:58:17 by nlaerema          #+#    #+#             */
-/*   Updated: 2023/12/02 02:49:51 by nlaerema         ###   ########.fr       */
+/*   Updated: 2023/12/02 17:39:44 by nlaerema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,11 @@
 # include "libft/libft.h"
 
 # define INSTRUCTION_COUNT 11
+# define PILE_COUNT 2
 # define ALGO_COUNT 2
+
+# define A 0
+# define B 1
 
 # define SA 0
 # define SB 1
@@ -32,38 +36,46 @@
 
 typedef struct s_pile
 {
-	t_uint	all_count;
-	t_uint	a_count;
-	t_uint	b_count;
-	t_list	*a;
-	t_list	*b;
-	t_uint	instruction_count;
-	t_list	*instruction;
+	t_uint	count;
+	t_list	*lst;
 }	t_pile;
 
-int		push_swap(t_uint *tab, t_uint tab_size);
+typedef struct s_algo
+{
+	t_uint	all_count;
+	t_pile	pile[PILE_COUNT];
+	t_uint	instruction_count;
+	t_list	*instruction;
+}	t_algo;
 
-int		add_instruction(t_pile *pile, t_uint instruction);
-t_bool	is_useless_instruction(t_uint instruction, t_uint last_instruction);
-t_list	*skip_instruction(t_pile *pile, t_uint instruction);
-void	print_instruction(t_uint *instruction);
+typedef struct s_push_swap
+{
+	t_uint	*tab;
+	t_uint	tab_size;	
+	t_uint	algo_index;
+	t_algo	algo[ALGO_COUNT];
+}	t_push_swap;
 
-int		radix_sort(t_pile *pile, t_uint *tab, t_uint tab_size);
-int		quick_sort(t_pile *pile, t_uint *tab, t_uint tab_size);
+void	push_swap_end(t_push_swap *ps, char *error_msg, int error);
+void	push_swap(t_uint *tab, t_uint tab_size);
 
-int		pile_init(t_pile *pile, t_uint *tab, t_uint tab_size);
-t_uint	sort_count(t_pile *pile);
+void	add_instruction(t_push_swap *ps, t_uint instruction);
 
-int		push_a(t_pile *pile);
-int		push_b(t_pile *pile);
-int		swap_a(t_pile *pile);
-int		swap_b(t_pile *pile);
-int		swap_swap(t_pile *pile);
-int		rotate_a(t_pile *pile);
-int		rotate_b(t_pile *pile);
-int		rotate_rotate(t_pile *pile);
-int		reverse_rotate_a(t_pile *pile);
-int		reverse_rotate_b(t_pile *pile);
-int		reverse_rotate_rotate(t_pile *pile);
+void	radix_sort(t_push_swap *ps);
+void	quick_sort(t_push_swap *ps);
+
+t_algo	*get_algo(t_push_swap *ps);
+t_pile	*get_pile(t_push_swap *ps, t_uint pile_index);
+t_uint	get_top(t_push_swap *ps, t_uint pile_index);
+t_uint	get_bot(t_push_swap *ps, t_uint pile_index);
+
+int		dup_pile(t_pile *pile_dst, t_pile *pile_src);
+t_uint	sort_count(t_push_swap *ps);
+t_algo	*best_algo(t_algo *algo, t_uint algo_count);
+
+void	swap(t_push_swap *ps, t_uint pile_index);
+void	push(t_push_swap *ps, t_uint pile_index);
+void	rotate(t_push_swap *ps, t_uint pile_index);
+void	reverse_rotate(t_push_swap *ps, t_uint pile_index);
 
 #endif

@@ -6,42 +6,77 @@
 /*   By: nlaerema <nlaerema@student.42lehavre.fr>	+#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 10:58:17 by nlaerema          #+#    #+#             */
-/*   Updated: 2023/12/02 01:57:29 by nlaerema         ###   ########.fr       */
+/*   Updated: 2023/12/02 21:20:30 by nlaerema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-t_bool	is_useless_instruction(t_uint instruction, t_uint last_instruction)
+void	swap(t_push_swap *ps, t_uint pile_index)
 {
-	return ((instruction == SA && last_instruction == SA)
-		|| (instruction == SB && last_instruction == SB)
-		|| (instruction == SS && last_instruction == SS)
-		|| (instruction == PA && last_instruction == PB)
-		|| (instruction == PB && last_instruction == PA)
-		|| (instruction == RA && last_instruction == RRA)
-		|| (instruction == RB && last_instruction == RRB)
-		|| (instruction == RR && last_instruction == RRR)
-		|| (instruction == RRA && last_instruction == RA)
-		|| (instruction == RRB && last_instruction == RB)
-		|| (instruction == RRR && last_instruction == RR));
+	t_pile	*pile;
+	t_list	*tmp;
+
+	pile = get_pile(ps, pile_index);
+	if (2 <= pile->count)
+	{
+		tmp = pile->lst;
+		pile->lst = pile->lst->next;
+		tmp->next = pile->lst->next;
+		pile->lst->next = tmp;
+		add_instruction(ps, SA + pile_index);
+	}
 }
 
-t_list	*skip_instruction(t_pile *pile, t_uint instruction)
+void	push(t_push_swap *ps, t_uint pile_index)
 {
-	t_list	*current;
+	t_pile	*pile_from;
+	t_pile	*pile_to;
+	t_list	*tmp;
 
-	current = pile->instruction;
-	while (current && *((t_uint *)current->data) == instruction)
-		current = current->next;
-	return (current);
+	pile_from = get_pile(ps, (pile_index + 1) % PILE_COUNT);
+	pile_to = get_pile(ps, pile_index);
+	if (pile_from->count)
+	{
+		tmp = pile_from->lst->next;
+		ft_lstadd_front(&pile_to->lst, pile_from->lst);
+		pile_from->lst = tmp;
+		pile_from->count--;
+		pile_to->count++;
+		add_instruction(ps, PA + pile_index);
+	}
 }
 
-void	print_instruction(t_uint *instruction)
+void	rotate(t_push_swap *ps, t_uint pile_index)
 {
-	static char	*instruction_str[INSTRUCTION_COUNT]
-		= {"sa", "sb", "ss", "pa", "pb", "ra", "rb", "rr", "rra", "rrb", "rrr"};
+	t_pile	*pile;
+	t_list	*tmp;
 
-	ft_putstr_fd(instruction_str[*instruction], STDOUT_FILENO);
-	ft_putchar_fd('\n', STDOUT_FILENO);
+	pile = get_pile(ps, pile_index);
+	if (2 <= pile->count)
+	{
+		tmp = pile->lst->next;
+		ft_lstlast(pile->lst)->next = pile->lst;
+		pile->lst->next = NULL;
+		pile->lst = tmp;
+		add_instruction(ps, RA + pile_index);
+	}
+}
+
+void	reverse_rotate(t_push_swap *ps, t_uint pile_index)
+{
+	t_pile	*pile;
+	t_list	**end;
+
+	pile = get_pile(ps, pile_index);
+	if (2 <= pile->count)
+	{
+		end = &(pile->lst->next);
+		while ((*end)->next)
+			end = &(*end)->next;
+		(*end)->next = pile->lst;
+		pile->lst = *end;
+		*end = NULL;
+		add_instruction(ps, RRA + pile_index);
+	}
 }

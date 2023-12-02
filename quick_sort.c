@@ -6,87 +6,55 @@
 /*   By: nlaerema <nlaerema@student.42lehavre.fr>	+#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 10:58:17 by nlaerema          #+#    #+#             */
-/*   Updated: 2023/12/02 03:34:18 by nlaerema         ###   ########.fr       */
+/*   Updated: 2023/12/02 21:09:52 by nlaerema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-static int	_sort_a(t_pile *pile, t_uint size, t_uint pivot);
-static int	_sort_b(t_pile *pile, t_uint size, t_uint pivot);
+static void	_sort_a(t_push_swap *ps, t_uint size, t_uint pivot);
+static void	_sort_b(t_push_swap *ps, t_uint size, t_uint pivot);
 
-int	_sort_a_end(t_pile *pile, t_uint pivot,
+static void	_sort_a_end(t_push_swap *ps, t_uint pivot,
 				t_uint size_a, t_uint size_b)
 {
 	t_uint	i;
 
 	i = 0;
-	if (size_a != pile->a_count)
+	if (size_a != get_pile(ps, A)->count)
+	{
 		while (i++ < size_a)
-			reverse_rotate_a(pile);
-	if (_sort_a(pile, size_a, pivot + (size_a / 2)))
-		return (EXIT_FAILURE);
-	if (_sort_b(pile, size_b, pivot - (size_b / 2)))
-		return (EXIT_FAILURE);
+			reverse_rotate(ps, A);
+	}
+	_sort_a(ps, size_a, pivot + (size_a / 2));
+	_sort_b(ps, size_b, pivot - (size_b / 2));
 	i = 0;
 	while (i++ < size_b)
-		push_a(pile);
-	return (errno == ENOMEM);
+		push(ps, A);
 }
 
-static int	_sort_a(t_pile *pile, t_uint size, t_uint pivot)
-{
-	t_uint	size_a;
-	t_uint	size_b;
-	t_uint	current;
-
-	if (1 < size)
-	{
-		size_a = 0;
-		size_b = 0;
-		while (size_a + size_b < size)
-		{
-			current = *(t_uint *)pile->a->data;
-			if (pivot < current)
-			{
-				rotate_a(pile);
-				size_a++;
-			}
-			else
-			{
-				push_b(pile);
-				size_b++;
-			}
-		}
-		return (_sort_a_end(pile, pivot, size_a, size_b));
-	}
-	return (EXIT_SUCCESS);
-}
-
-int	_sort_b_end(t_pile *pile, t_uint pivot,
+static void	_sort_b_end(t_push_swap *ps, t_uint pivot,
 				t_uint size_a, t_uint size_b)
 {
 	t_uint	i;
 
+	_sort_a(ps, size_a, pivot + (size_a / 2));
 	i = 0;
-	if (size_b != pile->b_count)
+	if (size_b != get_pile(ps, B)->count)
+	{
 		while (i++ < size_b)
-			reverse_rotate_b(pile);
-	if (_sort_a(pile, size_a, pivot + (size_a / 2)))
-		return (EXIT_FAILURE);
-	if (_sort_b(pile, size_b, pivot - (size_b / 2)))
-		return (EXIT_FAILURE);
+			reverse_rotate(ps, B);
+	}
+	_sort_b(ps, size_b, pivot - (size_b / 2));
 	i = 0;
 	while (i++ < size_a)
-		push_b(pile);
-	return (errno == ENOMEM);
+		push(ps, B);
 }
 
-static int	_sort_b(t_pile *pile, t_uint size, t_uint pivot)
+static void	_sort_a(t_push_swap *ps, t_uint size, t_uint pivot)
 {
 	t_uint	size_a;
 	t_uint	size_b;
-	t_uint	current;
 
 	if (1 < size)
 	{
@@ -94,26 +62,51 @@ static int	_sort_b(t_pile *pile, t_uint size, t_uint pivot)
 		size_b = 0;
 		while (size_a + size_b < size)
 		{
-			current = *(t_uint *)pile->b->data;
-			if (pivot < current)
+			if (pivot < get_top(ps, A))
 			{
-				push_a(pile);
+				rotate(ps, A);
 				size_a++;
 			}
 			else
 			{
-				rotate_b(pile);
+				push(ps, B);
 				size_b++;
 			}
 		}
-		return (_sort_b_end(pile, pivot, size_a, size_b));
+		_sort_a_end(ps, pivot, size_a, size_b);
 	}
-	return (EXIT_SUCCESS);
 }
 
-int	quick_sort(t_pile *pile, t_uint *tab, t_uint tab_size)
+static void	_sort_b(t_push_swap *ps, t_uint size, t_uint pivot)
 {
-	if (pile_init(pile, tab, tab_size))
-		return (EXIT_FAILURE);
-	return (_sort_a(pile, pile->a_count, pile->a_count / 2));
+	t_uint	size_a;
+	t_uint	size_b;
+
+	if (1 < size)
+	{
+		size_a = 0;
+		size_b = 0;
+		while (size_a + size_b < size)
+		{
+			if (pivot < get_top(ps, B))
+			{
+				push(ps, A);
+				size_a++;
+			}
+			else
+			{
+				rotate(ps, B);
+				size_b++;
+			}
+		}
+		_sort_b_end(ps, pivot, size_a, size_b);
+	}
+}
+
+void	quick_sort(t_push_swap *ps)
+{
+	t_uint	pile_size;
+
+	pile_size = get_pile(ps, A)->count;
+	_sort_a(ps, pile_size, pile_size / 2);
 }

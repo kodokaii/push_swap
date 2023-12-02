@@ -5,110 +5,81 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: nlaerema <nlaerema@student.42lehavre.fr>	+#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/05 10:58:17 by nlaerema          #+#    #+#             */
-/*   Updated: 2023/12/02 03:52:42 by nlaerema         ###   ########.fr       */
+/*   Created: 2023/12/02 21:23:53 by nlaerema          #+#    #+#             */
+/*   Updated: 2023/12/02 21:27:06 by nlaerema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-static int	_end(int error, t_pile *pile)
+static void	_print_instruction(t_uint *instruction)
 {
-	t_uint	min_index;
-	t_uint	min;
-	t_uint	i;
+	static char	*instruction_str[INSTRUCTION_COUNT]
+		= {"sa", "sb", "ss", "pa", "pb", "ra", "rb", "rr", "rra", "rrb", "rrr"};
 
-	i = 0;
-	min_index = 0;
-	min = UINT_MAX;
-	while (i < ALGO_COUNT)
-	{
-		if (pile[i].instruction_count < min)
-		{
-			min_index = i;
-			min = pile[i].instruction_count;
-		}
-		i++;
-	}
-	ft_lstiter_inv(pile[min_index].instruction, print_instruction);
-	while (i--)
-	{
-		ft_lstclear(&pile[i].a, NULL);
-		ft_lstclear(&pile[i].b, NULL);
-		ft_lstclear(&pile[i].instruction, NULL);
-	}
-	return (error);
+	ft_putendl_fd(instruction_str[*instruction], STDOUT_FILENO);
 }
 
-static t_bool	_remove_instruction(t_pile *pile, t_uint instruction)
+static void	_algo_init(t_push_swap *ps)
 {
-	t_list	*tmp;
+	t_list	*new;
+	t_uint	tab_index;
+	t_algo	*algo;
 
-	if (pile->instruction_count)
+	algo = get_algo(ps);
+	algo->all_count = ps->tab_size;
+	algo->pile[A].count = ps->tab_size;
+	algo->pile[A].lst = NULL;
+	algo->pile[B].count = 0;
+	algo->pile[B].lst = NULL;
+	algo->instruction_count = 0;
+	algo->instruction = NULL;
+	tab_index = ps->tab_size;
+	while (tab_index--)
 	{
-		if (is_useless_instruction(instruction,
-				*((t_uint *)pile->instruction->data)))
-		{
-			tmp = pile->instruction->next;
-			free(pile->instruction);
-			pile->instruction = tmp;
-			pile->instruction_count--;
-			return (FT_TRUE);
-		}
+		new = ft_lstnew(ps->tab + tab_index);
+		if (!new)
+			push_swap_end(ps, ERRLOC, EXIT_FAILURE);
+		ft_lstadd_front(&algo->pile[A].lst, new);
 	}
-	return (FT_FALSE);
 }
 
-static t_bool	_fact_instruction(t_pile *pile,
-		t_uint instruction, t_uint *instruction_tab)
+static void	_run_algo(t_push_swap *ps, void (*algo)(t_push_swap *))
 {
-	t_list	*current;
+	ps->algo_index++;
+	_algo_init(ps);
+	algo(ps);
+}
 
-	current = NULL;
-	if (pile->instruction_count)
+void	push_swap_end(t_push_swap *ps, char *error_msg, int error)
+{
+	t_uint	algo_count;
+
+	algo_count = ps->algo_index + 1;
+	if (!error)
+		ft_lstiter_inv(best_algo(ps->algo, algo_count)->instruction,
+			_print_instruction);
+	while (algo_count--)
 	{
-		if (instruction == SA || instruction == SB)
-			current = skip_instruction(pile, SS);
-		if (instruction == RA || instruction == RB)
-			current = skip_instruction(pile, RR);
-		if (instruction == RRA || instruction == RRB)
-			current = skip_instruction(pile, RRR);
-		if ((instruction == SA && *((t_uint *)current->data) == SB)
-			|| (instruction == SB && *((t_uint *)current->data) == SA))
-			return (current->data = instruction_tab + SS, FT_TRUE);
-		if ((instruction == RA && *((t_uint *)current->data) == RB)
-			|| (instruction == RB && *((t_uint *)current->data) == RA))
-			return (current->data = instruction_tab + RR, FT_TRUE);
-		if ((instruction == RRA && *((t_uint *)current->data) == RRB)
-			|| (instruction == RRB && *((t_uint *)current->data) == RRA))
-			return (current->data = instruction_tab + RRR, FT_TRUE);
+		ft_lstclear(&ps->algo[algo_count].pile[A].lst, NULL);
+		ft_lstclear(&ps->algo[algo_count].pile[B].lst, NULL);
+		ft_lstclear(&ps->algo[algo_count].instruction, NULL);
 	}
-	return (FT_FALSE);
+	free(ps->tab);
+	if (error_msg)
+		ft_dprintf(STDOUT_FILENO, "%s\n", error_msg);
+	if (error)
+		exit(error);
 }
 
-int	add_instruction(t_pile *pile, t_uint instruction)
+void	push_swap(t_uint *tab, t_uint tab_size)
 {
-	t_list			*new;
-	static t_uint	instruction_tab[INSTRUCTION_COUNT]
-		= {SA, SB, SS, PA, PB, RA, RB, RR, RRA, RRB, RRR};
+	t_push_swap	ps;
 
-	if (_remove_instruction(pile, instruction))
-		return (EXIT_SUCCESS);
-	if (_fact_instruction(pile, instruction, instruction_tab))
-		return (EXIT_SUCCESS);
-	new = ft_lstnew(instruction_tab + instruction);
-	if (!new)
-		return (EXIT_FAILURE);
-	ft_lstadd_front(&pile->instruction, new);
-	pile->instruction_count++;
-	return (EXIT_SUCCESS);
-}
-
-int	push_swap(t_uint *tab, t_uint tab_size)
-{
-	t_pile	pile[ALGO_COUNT];
-
-	radix_sort(pile, tab, tab_size);
-	quick_sort(pile + 1, tab, tab_size);
-	return (_end(EXIT_SUCCESS, pile));
+	ps.tab = tab;
+	ps.tab_size = tab_size;
+	ps.algo_index = -1;
+	_run_algo(&ps, radix_sort);
+	_run_algo(&ps, quick_sort);
+	push_swap_end(&ps, NULL, EXIT_SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: nlaerema <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 23:14:01 by nlaerema          #+#    #+#             */
-/*   Updated: 2023/11/27 17:53:24 by nlaerema         ###   ########.fr       */
+/*   Updated: 2023/12/02 19:24:00 by nlaerema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,16 +104,19 @@ int	main(int argc, char *argv[])
 		argv++;
 		tab = NULL;
 		if (ft_split_argv(&argc, &argv))
-			return (_error(argv, tab));
+			return (ft_errloc());
 		tab = malloc(argc * sizeof(int));
+		if (!tab)
+		{
+			ft_split_free(argv);
+			return (ft_errloc());
+		}
 		if (_argv_to_tab(tab, argc, argv))
 			return (_error(argv, tab));
 		if (_normalize_tab(tab, argc))
 			return (_error(argv, tab));
-		if (push_swap((t_uint *)tab, argc))
-			return (_error(argv, tab));
 		ft_split_free(argv);
-		free(tab);
+		push_swap((t_uint *)tab, argc);
 	}
 	return (EXIT_SUCCESS);
 }

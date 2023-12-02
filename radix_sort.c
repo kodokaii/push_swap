@@ -6,37 +6,34 @@
 /*   By: nlaerema <nlaerema@student.42lehavre.fr>	+#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 10:58:17 by nlaerema          #+#    #+#             */
-/*   Updated: 2023/12/02 01:29:00 by nlaerema         ###   ########.fr       */
+/*   Updated: 2023/12/02 20:21:24 by nlaerema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-static int	_radix(t_pile *pile, t_uint bit)
+static int	_radix_a(t_push_swap *ps, t_uint bit)
 {
-	t_uint	i;
+	t_uint	all_count;
 
-	i = 0;
-	if ((1 << bit) <= pile->all_count)
+	all_count = get_algo(ps)->all_count;
+	if ((1 << bit) <= all_count)
 	{
-		while (i < pile->all_count)
+		while (all_count--)
 		{
-			if (*(t_uint *)pile->a->data & (1 << bit))
-				rotate_a(pile);
+			if (get_top(ps, A) & (1 << bit))
+				rotate(ps, A);
 			else
-				push_b(pile);
-			i++;
+				push(ps, B);
 		}
-		while (pile->b_count)
-			push_a(pile);
-		return (_radix(pile, bit + 1));
+		while (get_pile(ps, B)->count)
+			push(ps, A);
+		return (_radix_a(ps, bit + 1));
 	}
-	return (errno == ENOMEM);
+	return (EXIT_SUCCESS);
 }
 
-int	radix_sort(t_pile *pile, t_uint *tab, t_uint tab_size)
+void	radix_sort(t_push_swap *ps)
 {
-	if (pile_init(pile, tab, tab_size))
-		return (EXIT_FAILURE);
-	return (_radix(pile, 0));
+	_radix_a(ps, 0);
 }
