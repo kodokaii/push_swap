@@ -6,7 +6,7 @@
 /*   By: nlaerema <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 23:14:01 by nlaerema          #+#    #+#             */
-/*   Updated: 2023/11/25 16:02:12 by nlaerema         ###   ########.fr       */
+/*   Updated: 2023/11/27 17:53:24 by nlaerema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ int	main(int argc, char *argv[])
 			return (_error(argv, tab));
 		if (_normalize_tab(tab, argc))
 			return (_error(argv, tab));
-		if (push_swap(tab, argc))
+		if (push_swap((t_uint *)tab, argc))
 			return (_error(argv, tab));
 		ft_split_free(argv);
 		free(tab);

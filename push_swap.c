@@ -6,7 +6,7 @@
 /*   By: nlaerema <nlaerema@student.42lehavre.fr>	+#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 10:58:17 by nlaerema          #+#    #+#             */
-/*   Updated: 2023/11/27 14:25:01 by nlaerema         ###   ########.fr       */
+/*   Updated: 2023/12/02 03:05:23 by nlaerema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,57 +14,103 @@
 
 static int	_end(int error, t_pile *pile)
 {
-	ft_lstclear(&pile->a, NULL);
-	ft_lstclear(&pile->b, NULL);
+	t_uint	min_index;
+	t_uint	min;
+	t_uint	i;
+
+	i = 0;
+	min_index = 0;
+	min = UINT_MAX;
+	while (i < ALGO_COUNT)
+	{
+		if (pile[i].instruction_count < min)
+		{
+			min_index = i;
+			min = pile[i].instruction_count;
+		}
+		i++;
+	}
+	ft_lstclear(&pile[min_index].instruction, print_instruction);
+	while (i--)
+	{
+		ft_lstclear(&pile[i].a, NULL);
+		ft_lstclear(&pile[i].b, NULL);
+		ft_lstclear(&pile[i].instruction, NULL);
+	}
 	return (error);
 }
 
-static int	_init(int *tab, int tab_size, t_pile *pile)
+static t_bool	_remove_instruction(t_pile *pile, t_uint instruction)
 {
-	t_list	*new;
+	t_list	*tmp;
 
-	pile->all_count = tab_size;
-	pile->a_count = tab_size;
-	pile->b_count = 0;
-	pile->a = NULL;
-	pile->b = NULL;
-	while (tab_size--)
+	if (pile->instruction_count)
 	{
-		new = ft_lstnew(tab + tab_size);
-		if (!new)
-			return (EXIT_FAILURE);
-		ft_lstadd_front(&pile->a, new);
+		if (is_useless_instruction(instruction,
+				*((t_uint *)pile->instruction->data)))
+		{
+			tmp = pile->instruction->next;
+			free(pile->instruction);
+			pile->instruction = tmp;
+			pile->instruction_count--;
+			return (FT_TRUE);
+		}
 	}
+	return (FT_FALSE);
+}
+
+static t_bool	_fact_instruction(t_pile *pile,
+		t_uint instruction, t_uint *instruction_tab)
+{
+	t_list	*current;
+
+	current = NULL;
+	if (pile->instruction_count)
+	{
+		if (instruction == SA || instruction == SB)
+			current = skip_instruction(pile, SS);
+		if (instruction == RA || instruction == RB)
+			current = skip_instruction(pile, RR);
+		if (instruction == RRA || instruction == RRB)
+			current = skip_instruction(pile, RRR);
+		if ((instruction == SA && *((t_uint *)current->data) == SB)
+			|| (instruction == SB && *((t_uint *)current->data) == SA))
+			return (current->data = instruction_tab + SS, FT_TRUE);
+		if ((instruction == RA && *((t_uint *)current->data) == RB)
+			|| (instruction == RB && *((t_uint *)current->data) == RA))
+			return (current->data = instruction_tab + RR, FT_TRUE);
+		if ((instruction == RRA && *((t_uint *)current->data) == RRB)
+			|| (instruction == RRB && *((t_uint *)current->data) == RRA))
+			return (current->data = instruction_tab + RRR, FT_TRUE);
+	}
+	return (FT_FALSE);
+}
+
+int	add_instruction(t_pile *pile, t_uint instruction)
+{
+	t_list			*new;
+	static t_uint	instruction_tab[INSTRUCTION_COUNT]
+		= {SA, SB, SS, PA, PB, RA, RB, RR, RRA, RRB, RRR};
+
+	(void)_remove_instruction;
+	(void)_fact_instruction;
+	if (_remove_instruction(pile, instruction))
+		return (EXIT_SUCCESS);
+	if (_fact_instruction(pile, instruction, instruction_tab))
+		return (EXIT_SUCCESS);
+	new = ft_lstnew(instruction_tab + instruction);
+	if (!new)
+		return (EXIT_FAILURE);
+	ft_lstadd_front(&pile->instruction, new);
+	pile->instruction_count++;
 	return (EXIT_SUCCESS);
 }
 
-void	ft_radix_sort(t_pile *pile, t_uint bit)
+int	push_swap(t_uint *tab, t_uint tab_size)
 {
-	int	i;
+	t_pile	pile[ALGO_COUNT];
 
-	i = 0;
-	if ((1 << bit) < pile->all_count)
-	{
-		while (i < pile->all_count)
-		{
-			if (*(int *)pile->a->data & (1 << bit))
-				rotate_a(pile);
-			else
-				push_b(pile);
-			i++;
-		}
-		while (pile->b_count)
-			push_a(pile);
-		ft_radix_sort(pile, bit + 1);
-	}
-}
-
-int	push_swap(int *tab, int tab_size)
-{
-	t_pile	pile;
-
-	if (_init(tab, tab_size, &pile))
-		return (_end(EXIT_FAILURE, &pile));
-	ft_radix_sort(&pile, 0);
-	return (_end(EXIT_SUCCESS, &pile));
+	radix_sort(pile, tab, tab_size);
+	quick_sort(pile + 1, tab, tab_size);
+	return (_end(EXIT_SUCCESS, pile));
 }

@@ -6,58 +6,61 @@
 /*   By: nlaerema <nlaerema@student.42lehavre.fr>	+#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 10:58:17 by nlaerema          #+#    #+#             */
-/*   Updated: 2023/11/25 17:18:30 by nlaerema         ###   ########.fr       */
+/*   Updated: 2023/12/02 00:58:48 by nlaerema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	rotate_a(t_pile *pile)
+int	rotate_a(t_pile *pile)
 {
-	t_list	*buf;
+	t_list	*tmp;
 
 	if (1 < pile->a_count)
 	{
-		buf = pile->a->next;
+		tmp = pile->a->next;
 		ft_lstlast(pile->a)->next = pile->a;
 		pile->a->next = NULL;
-		pile->a = buf;
-		ft_putstr_fd("ra\n", STDOUT_FILENO);
+		pile->a = tmp;
+		return (add_instruction(pile, RA));
 	}
+	return (EXIT_SUCCESS);
 }
 
-void	rotate_b(t_pile *pile)
+int	rotate_b(t_pile *pile)
 {
-	t_list	*buf;
+	t_list	*tmp;
 
 	if (1 < pile->b_count)
 	{
-		buf = pile->b->next;
+		tmp = pile->b->next;
 		ft_lstlast(pile->b)->next = pile->b;
 		pile->b->next = NULL;
-		pile->b = buf;
-		ft_putstr_fd("rb\n", STDOUT_FILENO);
+		pile->b = tmp;
+		return (add_instruction(pile, RB));
 	}
+	return (EXIT_SUCCESS);
 }
 
-void	rotate_rotate(t_pile *pile)
+int	rotate_rotate(t_pile *pile)
 {
-	t_list	*buf;
+	t_list	*tmp;
 
 	if (1 < pile->a_count)
 	{
-		buf = pile->a->next;
+		tmp = pile->a->next;
 		ft_lstlast(pile->a)->next = pile->a;
 		pile->a->next = NULL;
-		pile->a = buf;
+		pile->a = tmp;
 	}
 	if (1 < pile->b_count)
 	{
-		buf = pile->b->next;
+		tmp = pile->b->next;
 		ft_lstlast(pile->b)->next = pile->b;
 		pile->b->next = NULL;
-		pile->b = buf;
+		pile->b = tmp;
 	}
 	if (1 < pile->a_count && 1 < pile->b_count)
-		ft_putstr_fd("rr\n", STDOUT_FILENO);
+		return (add_instruction(pile, RR));
+	return (EXIT_SUCCESS);
 }
