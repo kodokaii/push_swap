@@ -6,7 +6,7 @@
 /*   By: nlaerema <nlaerema@student.42lehavre.fr>	+#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 10:58:17 by nlaerema          #+#    #+#             */
-/*   Updated: 2023/12/02 03:08:58 by nlaerema         ###   ########.fr       */
+/*   Updated: 2023/12/02 03:52:42 by nlaerema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static int	_end(int error, t_pile *pile)
 		}
 		i++;
 	}
-	ft_lstclear(&pile[min_index].instruction, print_instruction);
+	ft_lstiter_inv(pile[min_index].instruction, print_instruction);
 	while (i--)
 	{
 		ft_lstclear(&pile[i].a, NULL);
