@@ -6,7 +6,7 @@
 /*   By: nlaerema <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 23:14:01 by nlaerema          #+#    #+#             */
-/*   Updated: 2023/12/02 19:24:00 by nlaerema         ###   ########.fr       */
+/*   Updated: 2023/12/04 00:48:32 by nlaerema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ static int	_normalize_tab(int *tab, int tab_size)
 	i = 0;
 	while (i < tab_size)
 	{
-		tab[tab_sort[i]] = i + 1;
+		tab[tab_sort[i]] = i;
 		i++;
 	}
 	free(tab_sort);

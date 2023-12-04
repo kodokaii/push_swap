@@ -6,7 +6,7 @@
 /*   By: nlaerema <nlaerema@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 10:58:17 by nlaerema          #+#    #+#             */
-/*   Updated: 2023/12/02 17:39:44 by nlaerema         ###   ########.fr       */
+/*   Updated: 2023/12/04 05:09:34 by nlaerema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,11 @@
 
 # include "libft/libft.h"
 
+# define DEBUG 0
+
 # define INSTRUCTION_COUNT 11
 # define PILE_COUNT 2
-# define ALGO_COUNT 2
+# define ALGO_COUNT 3
 
 # define A 0
 # define B 1
@@ -63,6 +65,7 @@ void	add_instruction(t_push_swap *ps, t_uint instruction);
 
 void	radix_sort(t_push_swap *ps);
 void	quick_sort(t_push_swap *ps);
+void	merge_sort(t_push_swap *ps);
 
 t_algo	*get_algo(t_push_swap *ps);
 t_pile	*get_pile(t_push_swap *ps, t_uint pile_index);

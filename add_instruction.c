@@ -6,7 +6,7 @@
 /*   By: nlaerema <nlaerema@student.42lehavre.fr>	+#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 10:58:17 by nlaerema          #+#    #+#             */
-/*   Updated: 2023/12/02 20:58:23 by nlaerema         ###   ########.fr       */
+/*   Updated: 2023/12/04 03:59:04 by nlaerema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,9 +92,9 @@ void	add_instruction(t_push_swap *ps, t_uint instruction)
 		= {SA, SB, SS, PA, PB, RA, RB, RR, RRA, RRB, RRR};
 
 	algo = get_algo(ps);
-	if (_remove_instruction(algo, instruction))
+	if (DEBUG || _remove_instruction(algo, instruction))
 	{
-		if (_fact_instruction(algo, instruction, instruction_tab))
+		if (DEBUG || _fact_instruction(algo, instruction, instruction_tab))
 		{
 			new = ft_lstnew(instruction_tab + instruction);
 			if (!new)
