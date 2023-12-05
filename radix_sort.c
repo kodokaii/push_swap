@@ -6,7 +6,7 @@
 /*   By: nlaerema <nlaerema@student.42lehavre.fr>	+#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 10:58:17 by nlaerema          #+#    #+#             */
-/*   Updated: 2023/12/02 20:21:24 by nlaerema         ###   ########.fr       */
+/*   Updated: 2023/12/05 14:19:35 by nlaerema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,12 @@ static int	_radix_a(t_push_swap *ps, t_uint bit)
 		while (all_count--)
 		{
 			if (get_top(ps, A) & (1 << bit))
-				rotate(ps, A);
+				action(ps, RA);
 			else
-				push(ps, B);
+				action(ps, PB);
 		}
 		while (get_pile(ps, B)->count)
-			push(ps, A);
+			action(ps, PA);
 		return (_radix_a(ps, bit + 1));
 	}
 	return (EXIT_SUCCESS);

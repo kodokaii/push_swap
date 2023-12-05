@@ -6,7 +6,7 @@
 /*   By: nlaerema <nlaerema@student.42lehavre.fr>	+#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 10:58:17 by nlaerema          #+#    #+#             */
-/*   Updated: 2023/12/02 21:20:30 by nlaerema         ###   ########.fr       */
+/*   Updated: 2023/12/05 14:18:58 by nlaerema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,4 +79,24 @@ void	reverse_rotate(t_push_swap *ps, t_uint pile_index)
 		*end = NULL;
 		add_instruction(ps, RRA + pile_index);
 	}
+}
+
+void	action(t_push_swap *ps, t_uint instruction)
+{
+	if (instruction == PA)
+		push(ps, A);
+	if (instruction == PB)
+		push(ps, B);
+	if (instruction == SA || instruction == SS)
+		swap(ps, A);
+	if (instruction == SB || instruction == SS)
+		swap(ps, B);
+	if (instruction == RA || instruction == RR)
+		rotate(ps, A);
+	if (instruction == RB || instruction == RR)
+		rotate(ps, B);
+	if (instruction == RRA || instruction == RRR)
+		reverse_rotate(ps, A);
+	if (instruction == RRB || instruction == RRR)
+		reverse_rotate(ps, B);
 }

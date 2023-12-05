@@ -6,7 +6,7 @@
 /*   By: nlaerema <nlaerema@student.42lehavre.fr>	+#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 10:58:17 by nlaerema          #+#    #+#             */
-/*   Updated: 2023/12/04 05:07:05 by nlaerema         ###   ########.fr       */
+/*   Updated: 2023/12/05 14:23:04 by nlaerema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,24 +24,24 @@ static void	_merge_a(t_push_swap *ps, t_uint size_a, t_uint size_b)
 	{
 		if (!size_a || get_top(ps, B) < get_top(ps, A))
 		{
-			push(ps, A);
+			action(ps, PA);
 			size_a++;
 			size_b--;
 		}
 		else
 		{
-			rotate(ps, A);
+			action(ps, RA);
 			size_a--;
 		}
 	}
 	if (size - size_a < get_pile(ps, A)->count / 2)
 	{
 		while (size_a++ < size)
-			reverse_rotate(ps, A);
+			action(ps, RRA);
 	}
 	else
 		while (size_a--)
-			rotate(ps, A);
+			action(ps, RA);
 }
 
 static void	_merge_b(t_push_swap *ps, t_uint size_a, t_uint size_b)
@@ -53,24 +53,24 @@ static void	_merge_b(t_push_swap *ps, t_uint size_a, t_uint size_b)
 	{
 		if (!size_b || get_top(ps, A) < get_top(ps, B))
 		{
-			push(ps, B);
+			action(ps, PB);
 			size_b++;
 			size_a--;
 		}
 		else
 		{
-			rotate(ps, B);
+			action(ps, RB);
 			size_b--;
 		}
 	}
 	if (size - size_b < get_pile(ps, B)->count / 2)
 	{
 		while (size_b++ < size)
-			reverse_rotate(ps, B);
+			action(ps, RRB);
 	}
 	else
 		while (size_b--)
-			rotate(ps, B);
+			action(ps, RB);
 }
 
 static void	_merge_sort_b(t_push_swap *ps, t_uint size_b)
@@ -82,7 +82,7 @@ static void	_merge_sort_b(t_push_swap *ps, t_uint size_b)
 		size_a = 0;
 		while (size_a < size_b)
 		{
-			push(ps, A);
+			action(ps, PA);
 			size_a++;
 			size_b--;
 		}
@@ -101,7 +101,7 @@ static void	_merge_sort_a(t_push_swap *ps, t_uint size_a)
 		size_b = 0;
 		while (size_b < size_a)
 		{
-			push(ps, B);
+			action(ps, PB);
 			size_b++;
 			size_a--;
 		}

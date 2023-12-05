@@ -6,7 +6,7 @@
 /*   By: nlaerema <nlaerema@student.42lehavre.fr>	+#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 10:58:17 by nlaerema          #+#    #+#             */
-/*   Updated: 2023/12/02 21:09:52 by nlaerema         ###   ########.fr       */
+/*   Updated: 2023/12/05 14:20:59 by nlaerema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,13 @@ static void	_sort_a_end(t_push_swap *ps, t_uint pivot,
 	if (size_a != get_pile(ps, A)->count)
 	{
 		while (i++ < size_a)
-			reverse_rotate(ps, A);
+			action(ps, RRA);
 	}
 	_sort_a(ps, size_a, pivot + (size_a / 2));
 	_sort_b(ps, size_b, pivot - (size_b / 2));
 	i = 0;
 	while (i++ < size_b)
-		push(ps, A);
+		action(ps, PA);
 }
 
 static void	_sort_b_end(t_push_swap *ps, t_uint pivot,
@@ -43,12 +43,12 @@ static void	_sort_b_end(t_push_swap *ps, t_uint pivot,
 	if (size_b != get_pile(ps, B)->count)
 	{
 		while (i++ < size_b)
-			reverse_rotate(ps, B);
+			action(ps, RRB);
 	}
 	_sort_b(ps, size_b, pivot - (size_b / 2));
 	i = 0;
 	while (i++ < size_a)
-		push(ps, B);
+		action(ps, PB);
 }
 
 static void	_sort_a(t_push_swap *ps, t_uint size, t_uint pivot)
@@ -64,12 +64,12 @@ static void	_sort_a(t_push_swap *ps, t_uint size, t_uint pivot)
 		{
 			if (pivot < get_top(ps, A))
 			{
-				rotate(ps, A);
+				action(ps, RA);
 				size_a++;
 			}
 			else
 			{
-				push(ps, B);
+				action(ps, PB);
 				size_b++;
 			}
 		}
@@ -90,12 +90,12 @@ static void	_sort_b(t_push_swap *ps, t_uint size, t_uint pivot)
 		{
 			if (pivot < get_top(ps, B))
 			{
-				push(ps, A);
+				action(ps, PA);
 				size_a++;
 			}
 			else
 			{
-				rotate(ps, B);
+				action(ps, RB);
 				size_b++;
 			}
 		}

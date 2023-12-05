@@ -6,7 +6,7 @@
 /*   By: nlaerema <nlaerema@student.42lehavre.fr>	+#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 10:58:17 by nlaerema          #+#    #+#             */
-/*   Updated: 2023/12/02 17:14:21 by nlaerema         ###   ########.fr       */
+/*   Updated: 2023/12/05 14:17:56 by nlaerema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,25 +32,6 @@ int	dup_algo(t_algo *algo_dst, t_algo *algo_src)
 	algo_dst->pile[B].count = algo_src->pile[B].count;
 	algo_dst->instruction_count = algo_src->instruction_count;
 	return (EXIT_SUCCESS);
-}
-
-t_uint	sort_count(t_push_swap *ps)
-{
-	t_list	*current;
-	t_uint	res;
-	t_uint	i;
-
-	i = 1;
-	res = 0;
-	current = get_pile(ps, A)->lst;
-	while (i <= get_pile(ps, A)->count)
-	{
-		if (i == *(t_uint *)current->data)
-			res++;
-		current = current->next;
-		i++;
-	}
-	return (res);
 }
 
 t_algo	*best_algo(t_algo *algo, t_uint algo_count)
