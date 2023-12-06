@@ -6,7 +6,7 @@
 /*   By: nlaerema <nlaerema@student.42lehavre.fr>	+#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 10:58:17 by nlaerema          #+#    #+#             */
-/*   Updated: 2023/12/05 14:20:59 by nlaerema         ###   ########.fr       */
+/*   Updated: 2023/12/06 00:24:42 by nlaerema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,8 @@ static void	_sort_a_end(t_push_swap *ps, t_uint pivot,
 	t_uint	i;
 
 	i = 0;
-	if (size_a != get_pile(ps, A)->count)
-	{
-		while (i++ < size_a)
-			action(ps, RRA);
-	}
+	while (i++ < size_a)
+		action(ps, RRA);
 	_sort_a(ps, size_a, pivot + (size_a / 2));
 	_sort_b(ps, size_b, pivot - (size_b / 2));
 	i = 0;
@@ -40,11 +37,8 @@ static void	_sort_b_end(t_push_swap *ps, t_uint pivot,
 
 	_sort_a(ps, size_a, pivot + (size_a / 2));
 	i = 0;
-	if (size_b != get_pile(ps, B)->count)
-	{
-		while (i++ < size_b)
-			action(ps, RRB);
-	}
+	while (i++ < size_b)
+		action(ps, RRB);
 	_sort_b(ps, size_b, pivot - (size_b / 2));
 	i = 0;
 	while (i++ < size_a)

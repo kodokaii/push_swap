@@ -6,7 +6,7 @@
 /*   By: nlaerema <nlaerema@student.42lehavre.fr>	+#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 10:58:17 by nlaerema          #+#    #+#             */
-/*   Updated: 2023/12/05 14:18:58 by nlaerema         ###   ########.fr       */
+/*   Updated: 2023/12/05 23:36:17 by nlaerema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	swap(t_push_swap *ps, t_uint pile_index)
 		pile->lst = pile->lst->next;
 		tmp->next = pile->lst->next;
 		pile->lst->next = tmp;
-		add_instruction(ps, SA + pile_index);
+		new_instruction(ps, SA + pile_index);
 	}
 }
 
@@ -43,7 +43,7 @@ void	push(t_push_swap *ps, t_uint pile_index)
 		pile_from->lst = tmp;
 		pile_from->count--;
 		pile_to->count++;
-		add_instruction(ps, PA + pile_index);
+		new_instruction(ps, PA + pile_index);
 	}
 }
 
@@ -59,7 +59,7 @@ void	rotate(t_push_swap *ps, t_uint pile_index)
 		ft_lstlast(pile->lst)->next = pile->lst;
 		pile->lst->next = NULL;
 		pile->lst = tmp;
-		add_instruction(ps, RA + pile_index);
+		new_instruction(ps, RA + pile_index);
 	}
 }
 
@@ -77,7 +77,7 @@ void	reverse_rotate(t_push_swap *ps, t_uint pile_index)
 		(*end)->next = pile->lst;
 		pile->lst = *end;
 		*end = NULL;
-		add_instruction(ps, RRA + pile_index);
+		new_instruction(ps, RRA + pile_index);
 	}
 }
 

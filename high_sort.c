@@ -1,39 +1,46 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   radix_sort.c                                       :+:      :+:    :+:   */
+/*   high_sort.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nlaerema <nlaerema@student.42lehavre.fr>	+#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 10:58:17 by nlaerema          #+#    #+#             */
-/*   Updated: 2023/12/06 02:33:13 by nlaerema         ###   ########.fr       */
+/*   Updated: 2023/12/06 03:59:11 by nlaerema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-static int	_radix_a(t_push_swap *ps, t_uint bit)
+static void	_tier(t_push_swap *ps, t_uint max)
 {
-	t_uint	all_count;
+	t_uint	pile_count;
+	t_uint	top;
+	t_uint	i;
 
-	all_count = get_algo(ps)->all_count;
-	if ((1 << bit) < all_count)
+	pile_count = get_pile(ps, A)->count;
+	if (3 < pile_count)
 	{
-		while (all_count--)
+		i = 0;
+		while (i < pile_count)
 		{
-			if (get_top(ps, A) & (1 << bit))
+			top = get_top(ps, A);
+			if (max - pile_count / 3 < top || max - 3 <= top)
 				action(ps, RA);
 			else
+			{
 				action(ps, PB);
+				if (top < max - 2 * pile_count / 3)
+					action(ps, RB);
+			}
+			i++;
 		}
-		while (get_pile(ps, B)->count)
-			action(ps, PA);
-		return (_radix_a(ps, bit + 1));
+		_tier(ps, max);
 	}
-	return (EXIT_SUCCESS);
 }
 
-void	radix_sort(t_push_swap *ps)
+void	high_sort(t_push_swap *ps)
 {
-	_radix_a(ps, 0);
+	_tier(ps, get_pile(ps, A)->count);
+	tiny_sort(ps);
 }

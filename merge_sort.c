@@ -6,7 +6,7 @@
 /*   By: nlaerema <nlaerema@student.42lehavre.fr>	+#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 10:58:17 by nlaerema          #+#    #+#             */
-/*   Updated: 2023/12/05 14:23:04 by nlaerema         ###   ########.fr       */
+/*   Updated: 2023/12/06 00:25:15 by nlaerema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,8 @@ static void	_merge_a(t_push_swap *ps, t_uint size_a, t_uint size_b)
 			size_a--;
 		}
 	}
-	if (size - size_a < get_pile(ps, A)->count / 2)
-	{
-		while (size_a++ < size)
-			action(ps, RRA);
-	}
-	else
-		while (size_a--)
-			action(ps, RA);
+	while (size_a++ < size)
+		action(ps, RRA);
 }
 
 static void	_merge_b(t_push_swap *ps, t_uint size_a, t_uint size_b)
@@ -63,14 +57,8 @@ static void	_merge_b(t_push_swap *ps, t_uint size_a, t_uint size_b)
 			size_b--;
 		}
 	}
-	if (size - size_b < get_pile(ps, B)->count / 2)
-	{
-		while (size_b++ < size)
-			action(ps, RRB);
-	}
-	else
-		while (size_b--)
-			action(ps, RB);
+	while (size_b++ < size)
+		action(ps, RRB);
 }
 
 static void	_merge_sort_b(t_push_swap *ps, t_uint size_b)

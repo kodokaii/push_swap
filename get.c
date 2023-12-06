@@ -6,7 +6,7 @@
 /*   By: nlaerema <nlaerema@student.42lehavre.fr>	+#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 10:58:17 by nlaerema          #+#    #+#             */
-/*   Updated: 2023/12/05 14:17:26 by nlaerema         ###   ########.fr       */
+/*   Updated: 2023/12/05 23:34:54 by nlaerema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,23 +33,10 @@ t_uint	get_bot(t_push_swap *ps, t_uint pile_index)
 			ft_lstlast(ps->algo[ps->algo_index].pile[pile_index].lst)->data));
 }
 
-t_uint	get_sort_count(t_push_swap *ps)
+t_uint	*get_instruction(t_uint instruction)
 {
-	t_pile	*pile;
-	t_list	*current;
-	t_uint	res;
-	t_uint	i;
+	static t_uint	instruction_tab[INSTRUCTION_COUNT]
+		= {SA, SB, SS, PA, PB, RA, RB, RR, RRA, RRB, RRR};
 
-	i = 0;
-	res = 0;
-	pile = get_pile(ps, A);
-	current = pile->lst;
-	while (i <= pile->count)
-	{
-		if (i == *(t_uint *)current->data)
-			res++;
-		current = current->next;
-		i++;
-	}
-	return (res);
+	return (instruction_tab + instruction);
 }
