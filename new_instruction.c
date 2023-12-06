@@ -6,7 +6,7 @@
 /*   By: nlaerema <nlaerema@student.42lehavre.fr>	+#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 10:58:17 by nlaerema          #+#    #+#             */
-/*   Updated: 2023/12/06 03:53:26 by nlaerema         ###   ########.fr       */
+/*   Updated: 2023/12/06 15:35:07 by nlaerema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,20 @@
 
 static t_uint	_remove_instruction(t_push_swap *ps, t_uint instruction)
 {
+	t_list	**current;
 	t_algo	*algo;
 
 	algo = get_algo(ps);
 	if (algo->instruction_count)
 	{
-		if (inverse_instruction(instruction)
-			== *((t_uint *)algo->instruction->data))
+		current = &algo->instruction;
+		if (is_instruction(instruction, 3, SA, RA, RRA))
+			current = skip_instruction_b(ps);
+		if (is_instruction(instruction, 3, SB, RB, RRB))
+			current = skip_instruction_a(ps);
+		if (inverse_instruction(instruction) == *((t_uint *)(*current)->data))
 		{
-			delete_instruction(ps);
+			delete_next_instruction(ps, current);
 			return (EXIT_SUCCESS);
 		}
 	}
@@ -37,9 +42,9 @@ static t_bool	_toggle_rotate(t_push_swap *ps, t_uint instruction)
 	t_uint	i;
 
 	pile = NULL;
-	if (instruction == RA || instruction == RRA)
+	if (is_instruction(instruction, 2, RA, RRA))
 		pile = get_pile(ps, A);
-	if (instruction == RB || instruction == RRB)
+	if (is_instruction(instruction, 2, RB, RRB))
 		pile = get_pile(ps, B);
 	instruction_count = count_instruction(ps, instruction);
 	if (pile && pile->count / 2 <= instruction_count)
@@ -62,11 +67,11 @@ static t_bool	_fact_instruction(t_push_swap *ps, t_uint instruction)
 	current = NULL;
 	if (get_algo(ps)->instruction_count)
 	{
-		if (instruction == SA || instruction == SB)
+		if (is_instruction(instruction, 2, SA, SB))
 			current = skip_instruction(ps, SS);
-		if (instruction == RA || instruction == RB)
+		if (is_instruction(instruction, 2, RA, RB))
 			current = skip_instruction(ps, RR);
-		if (instruction == RRA || instruction == RRB)
+		if (is_instruction(instruction, 2, RRA, RRB))
 			current = skip_instruction(ps, RRR);
 		if ((instruction == SA && *((t_uint *)current->data) == SB)
 			|| (instruction == SB && *((t_uint *)current->data) == SA))

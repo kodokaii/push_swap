@@ -6,7 +6,7 @@
 /*   By: nlaerema <nlaerema@student.42lehavre.fr>	+#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 10:58:17 by nlaerema          #+#    #+#             */
-/*   Updated: 2023/12/06 03:59:11 by nlaerema         ###   ########.fr       */
+/*   Updated: 2023/12/06 20:30:40 by nlaerema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,4 +43,5 @@ void	high_sort(t_push_swap *ps)
 {
 	_tier(ps, get_pile(ps, A)->count);
 	tiny_sort(ps);
+	best_sort(ps);
 }

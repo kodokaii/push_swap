@@ -6,32 +6,49 @@
 /*   By: nlaerema <nlaerema@student.42lehavre.fr>	+#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 10:58:17 by nlaerema          #+#    #+#             */
-/*   Updated: 2023/12/05 23:32:59 by nlaerema         ###   ########.fr       */
+/*   Updated: 2023/12/06 21:13:32 by nlaerema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int	dup_algo(t_algo *algo_dst, t_algo *algo_src)
+void	print_instruction(t_uint *instruction)
 {
-	if (ft_lstdup(algo_dst->pile[A].lst, algo_src->pile[A].lst))
-		return (EXIT_FAILURE);
-	if (ft_lstdup(algo_dst->pile[B].lst, algo_src->pile[B].lst))
+	static char	*instruction_str[INSTRUCTION_COUNT]
+		= {"sa", "sb", "ss", "pa", "pb", "ra", "rb", "rr", "rra", "rrb", "rrr"};
+
+	ft_putendl_fd(instruction_str[*instruction], STDOUT_FILENO);
+}
+
+void	algo_init(t_push_swap *ps)
+{
+	t_list	*new;
+	t_uint	tab_index;
+	t_algo	*algo;
+
+	algo = get_algo(ps);
+	algo->all_count = ps->tab_size;
+	algo->pile[A].count = ps->tab_size;
+	algo->pile[A].lst = NULL;
+	algo->pile[B].count = 0;
+	algo->pile[B].lst = NULL;
+	algo->instruction_count = 0;
+	algo->instruction = NULL;
+	tab_index = ps->tab_size;
+	while (tab_index--)
 	{
-		ft_lstclear(&algo_dst->pile[A].lst, NULL);
-		return (EXIT_FAILURE);
+		new = ft_lstnew(ps->tab + tab_index);
+		if (!new)
+			push_swap_end(ps, ERRLOC, EXIT_FAILURE);
+		ft_lstadd_front(&algo->pile[A].lst, new);
 	}
-	if (ft_lstdup(algo_dst->instruction, algo_src->instruction))
-	{
-		ft_lstclear(&algo_dst->pile[A].lst, NULL);
-		ft_lstclear(&algo_dst->pile[B].lst, NULL);
-		return (EXIT_FAILURE);
-	}
-	algo_dst->all_count = algo_src->all_count;
-	algo_dst->pile[A].count = algo_src->pile[A].count;
-	algo_dst->pile[B].count = algo_src->pile[B].count;
-	algo_dst->instruction_count = algo_src->instruction_count;
-	return (EXIT_SUCCESS);
+}
+
+void	run_algo(t_push_swap *ps, void (*algo)(t_push_swap *))
+{
+	ps->algo_index++;
+	algo_init(ps);
+	algo(ps);
 }
 
 t_algo	*best_algo(t_algo *algo, t_uint algo_count)
