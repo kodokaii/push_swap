@@ -6,7 +6,7 @@
 /*   By: nlaerema <nlaerema@student.42lehavre.fr>	+#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 10:58:17 by nlaerema          #+#    #+#             */
-/*   Updated: 2023/12/07 03:01:02 by nlaerema         ###   ########.fr       */
+/*   Updated: 2023/12/07 05:27:16 by nlaerema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,27 @@
 
 static int	_exec_instruction(t_push_swap *ps, char *instruction)
 {
-	if (ft_strcmp(instruction, "sa"))
+	if (!ft_strcmp(instruction, "sa\n"))
 		action(ps, SA);
-	else if (ft_strcmp(instruction, "sb"))
+	else if (!ft_strcmp(instruction, "sb\n"))
 		action(ps, SB);
-	else if (ft_strcmp(instruction, "ss"))
+	else if (!ft_strcmp(instruction, "ss\n"))
 		action(ps, SS);
-	else if (ft_strcmp(instruction, "pa"))
+	else if (!ft_strcmp(instruction, "pa\n"))
 		action(ps, PA);
-	else if (ft_strcmp(instruction, "pb"))
+	else if (!ft_strcmp(instruction, "pb\n"))
 		action(ps, PB);
-	else if (ft_strcmp(instruction, "ra"))
+	else if (!ft_strcmp(instruction, "ra\n"))
 		action(ps, RA);
-	else if (ft_strcmp(instruction, "rb"))
+	else if (!ft_strcmp(instruction, "rb\n"))
 		action(ps, RB);
-	else if (ft_strcmp(instruction, "rr"))
+	else if (!ft_strcmp(instruction, "rr\n"))
 		action(ps, RR);
-	else if (ft_strcmp(instruction, "rra"))
+	else if (!ft_strcmp(instruction, "rra\n"))
 		action(ps, RRA);
-	else if (ft_strcmp(instruction, "rrb"))
+	else if (!ft_strcmp(instruction, "rrb\n"))
 		action(ps, RRB);
-	else if (ft_strcmp(instruction, "rrr"))
+	else if (!ft_strcmp(instruction, "rrr\n"))
 		action(ps, RRR);
 	else
 		return (EXIT_FAILURE);
