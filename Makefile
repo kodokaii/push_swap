@@ -23,6 +23,7 @@ SRC 		= algo_utilis.c\
 			  push_swap.c\
 			  quick_sort.c\
 			  radix_sort.c\
+			  radix_ternary_sort.c\
 			  script.c\
 			  skip_instruction.c\
 			  tab.c

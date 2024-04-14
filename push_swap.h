@@ -6,7 +6,7 @@
 /*   By: nlaerema <nlaerema@student.42lehavre.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 10:58:17 by nlaerema          #+#    #+#             */
-/*   Updated: 2023/12/06 21:12:28 by nlaerema         ###   ########.fr       */
+/*   Updated: 2024/04/14 20:10:07 by nlaerema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 # define INSTRUCTION_COUNT 11
 # define PILE_COUNT 2
-# define ALGO_COUNT 4
+# define ALGO_MAX_COUNT 5
 
 # define A 0
 # define B 1
@@ -53,7 +53,7 @@ typedef struct s_push_swap
 	t_uint	*tab;
 	t_uint	tab_size;	
 	t_uint	algo_index;
-	t_algo	algo[ALGO_COUNT];
+	t_algo	algo[ALGO_MAX_COUNT];
 }	t_push_swap;
 
 int		sort_tab_index(int *tab, int *tab_sort, int count);
@@ -63,6 +63,7 @@ int		argv_to_tab(int *tab, int argc, char **argv);
 void	push_swap_end(t_push_swap *ps, char *error_msg, int error);
 void	push_swap(t_uint *tab, t_uint tab_size);
 
+void	radix_ternary_sort(t_push_swap *ps);
 void	radix_sort(t_push_swap *ps);
 void	quick_sort(t_push_swap *ps);
 void	merge_sort(t_push_swap *ps);

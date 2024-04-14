@@ -6,7 +6,7 @@
 /*   By: nlaerema <nlaerema@student.42lehavre.fr>	+#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 21:23:53 by nlaerema          #+#    #+#             */
-/*   Updated: 2024/02/01 16:34:31 by nlaerema         ###   ########.fr       */
+/*   Updated: 2024/04/14 20:37:28 by nlaerema         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ void	push_swap(t_uint *tab, t_uint tab_size)
 	ps.algo_index = -1;
 	if (!_is_sort(tab, tab_size))
 	{
+		run_algo(&ps, radix_ternary_sort);
 		run_algo(&ps, radix_sort);
 		run_algo(&ps, quick_sort);
 		run_algo(&ps, merge_sort);
